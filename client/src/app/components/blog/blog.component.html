@@ -1,0 +1,101 @@
+<h1 class="page-header">Blog Feed</h1>
+
+<div class="row show-hide-message">
+    <div [ngClass]="messageClass">
+        {{messagge}}
+    </div>
+</div>
+
+<button class="btn btn-warning" type="button" *ngIf="!newPost" (click)="newBlogFrom()">
+    New Post
+</button>
+<button class="btn btn-default" [disabled]="loadingBlogs" type="button" *ngIf="!newPost" (click)="reloadBlogs()">
+    <span class="glyphicon glyphicon-repeat"></span> Reload
+</button>
+
+<!-- New Blog Form -->
+<form [formGroup]="blogForm" (submit)="onBlogSubmit()" *ngIf="newPost">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <div [ngClass]="{'has-success': blogForm.controls.title.valid, 'has-error': blogForm.controls.title.dirty && blogForm.controls.title.errors}">
+            <input type="text" name="title" class="form-control" placeholder="Blog Title" autocomplete="off" formControlName="title" id="">
+            <ul class="help-block">
+                <li *ngIf="blogForm.controls.title.dirty && blogForm.controls.title.errors?.required">This field is required</li>
+                <li *ngIf="(blogForm.controls.title.dirty && blogForm.controls.title.errors?.minlength) || (blogForm.controls.title.dirty && blogForm.controls.title.errors?.maxlength)">Title should be minumin 5 and maximum 50 chars.</li>
+                <li *ngIf="(blogForm.controls.title.dirty && blogForm.controls.title.errors?.alphaNumericValidation)">Must be a letter or number.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="body">Body</label>
+        <div [ngClass]="{'has-success': blogForm.controls.body.valid, 'has-error': blogForm.controls.body.dirty && blogForm.controls.body.errors}">
+            <textarea name="body" id="" cols="80" rows="8" formControlName="body" class="form-control" placeholder="Blog Body"></textarea>
+            <ul class="help-block">
+                <li *ngIf="blogForm.controls.body.dirty && blogForm.controls.body.errors?.required">This field is required</li>
+                <li *ngIf="(blogForm.controls.body.dirty && blogForm.controls.body.errors?.minlength) || (blogForm.controls.body.dirty && blogForm.controls.body.errors?.maxlength)">body should be minumin 5 and maximum 500 chars.</li>
+            </ul>
+        </div>
+    </div>
+
+    <button [disabled]="processing" class="btn btn-warning" (click)="goBack()" type="button" name="button">Go Back</button>
+    <button [disabled]="processing || !blogForm.valid" class="btn btn-success" type="submit" name="button">Submit</button>
+
+</form>
+<!-- End -->
+
+<div *ngIf="!newPost">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Post Title</h3>
+        </div>
+        <div class="panel-body">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere pariatur sequi facilis placeat aliquid. Architecto sit vel, aspernatur quod esse expedita est adipisci asperiores illo velit? Asperiores corrupti ipsum unde.
+        </div>
+        <div class="panel-footer">
+            <div>
+                <strong>Posted By:</strong> abeceed234
+                <strong>Date: </strong> Feb 03 2018
+                <strong>Likes: </strong> 25
+                <strong>Dislikes: </strong> 22
+                <a href="#"><button type="button" class="btn btn-sm btn-info">Edit</button></a>
+                <a href="#"><button type="button" class="btn btn-sm btn-danger">Delete</button></a>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-sm btn-success">
+                        <span class="glyphicon glyphicon-thumbs-up"></span> Likes 21
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Jitendra</a>
+                        <a href="#">Surendra</a>
+                        <a href="#">Tulu</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button type="button" class="btn btn-sm btn-warning">
+                        <span class="glyphicon glyphicon-thumbs-down"></span> Dislikes 21
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Jitendra</a>
+                        <a href="#">Surendra</a>
+                        <a href="#">Tulu</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="list-group">
+                <div class="list-group-item">
+                    <button class="btn btn-sm btn-danger" type="button" (click)="draftComment()">Post Comment</button>
+                    <!-- <form>
+                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                        <button class="btn btn-sm btn-info" type="button">Submit</button>
+                        <button class="btn btn-sm btn-danger" type="button">Cancel</button>
+                    </form> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
