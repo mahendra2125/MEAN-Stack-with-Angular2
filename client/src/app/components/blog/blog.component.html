@@ -1,17 +1,19 @@
 <h1 class="page-header">Blog Feed</h1>
 
-<div class="row show-hide-message">
+<div class="row show-hide-message" *ngIf="message && newPost">
     <div [ngClass]="messageClass">
         {{messagge}}
     </div>
 </div>
 
-<button class="btn btn-warning" type="button" *ngIf="!newPost" (click)="newBlogFrom()">
-    New Post
-</button>
-<button class="btn btn-default" [disabled]="loadingBlogs" type="button" *ngIf="!newPost" (click)="reloadBlogs()">
-    <span class="glyphicon glyphicon-repeat"></span> Reload
-</button>
+<div class="mrgBot20">
+    <button class="btn btn-warning" type="button" *ngIf="!newPost" (click)="newBlogFrom()">
+        New Post
+    </button>
+    <button class="btn btn-default" [disabled]="loadingBlogs" type="button" *ngIf="!newPost" (click)="reloadBlogs()">
+        <span class="glyphicon glyphicon-repeat"></span> Reload
+    </button>
+</div>
 
 <!-- New Blog Form -->
 <form [formGroup]="blogForm" (submit)="onBlogSubmit()" *ngIf="newPost">
@@ -45,23 +47,25 @@
 <!-- End -->
 
 <div *ngIf="!newPost">
-    <div class="panel panel-primary">
+    <div class="panel panel-primary" *ngFor="let blog of blogPosts">
         <div class="panel-heading">
-            <h3 class="panel-title">Post Title</h3>
+            <h3 class="panel-title">{{blog.title}}</h3>
         </div>
         <div class="panel-body">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere pariatur sequi facilis placeat aliquid. Architecto sit vel, aspernatur quod esse expedita est adipisci asperiores illo velit? Asperiores corrupti ipsum unde.
+            {{blog.body}}
         </div>
         <div class="panel-footer">
             <div>
-                <strong>Posted By:</strong> abeceed234
-                <strong>Date: </strong> Feb 03 2018
-                <strong>Likes: </strong> 25
-                <strong>Dislikes: </strong> 22
-                <a href="#"><button type="button" class="btn btn-sm btn-info">Edit</button></a>
-                <a href="#"><button type="button" class="btn btn-sm btn-danger">Delete</button></a>
+                <strong>Posted By:</strong> {{blog.username}}
+                <strong>Date: </strong> {{blog.createdAt | date: 'MMM dd, yyyy'}}
+                <div *ngIf="username === blog.createdBy">
+                    <strong>Likes: </strong> {{blog.likes}}
+                    <strong>Dislikes: </strong> {{blog.dislikes}}
+                </div>
+                <a [routerLink]="['/edit-post/' + blog._id]" *ngIf="username === blog.createdBy"><button type="button" class="btn btn-sm btn-info">Edit</button></a>
+                <a [routerLink]="['/delete-post/' + blog._id]" *ngIf="username === blog.createdBy"><button type="button" class="btn btn-sm btn-danger">Delete</button></a>
 
-                <div class="dropdown">
+                <div class="dropdown" *ngIf="username !== blog.createdBy">
                     <button type="button" class="btn btn-sm btn-success">
                         <span class="glyphicon glyphicon-thumbs-up"></span> Likes 21
                     </button>
@@ -72,7 +76,7 @@
                     </div>
                 </div>
 
-                <div class="dropdown">
+                <div class="dropdown"  *ngIf="username !== blog.createdBy">
                     <button type="button" class="btn btn-sm btn-warning">
                         <span class="glyphicon glyphicon-thumbs-down"></span> Dislikes 21
                     </button>

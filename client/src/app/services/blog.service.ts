@@ -27,4 +27,19 @@ export class BlogService {
     return this.http.post(this.domain + 'blogs/newBlog', blog, this.options).map(res => res.json());
   }
 
+  getAllBlogs() {
+    this.createAuthenticationHeaders();
+    return this.http.get(this.domain + 'blogs/allBlogs', this.options).map(res => res.json());
+  }
+
+  getSingleBlog(id) {
+    this.createAuthenticationHeaders();
+    return this.http.get(this.domain + 'blogs/singleBlog/'+ id, this.options).map(res => res.json());
+  }
+
+  updateBlog(blog){
+    this.createAuthenticationHeaders();
+    return this.http.post(this.domain + 'blogs/updateBlog', blog, this.options).map(res => res.json());
+  }
+
 }
